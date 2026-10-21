@@ -6,7 +6,7 @@ jobs:
   core:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
       - run: npm install
@@ -31,7 +31,7 @@ jobs:
       DATABASE_URL: postgresql://campusloop:ci-only-password@localhost:5432/campusloop_test?schema=public
       RUN_POSTGRES_TESTS: 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
       - run: npm install
@@ -53,7 +53,7 @@ jobs:
       DEMO_MODE: 'true'
       DEMO_SEED: 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
       - run: npm install
