@@ -1,0 +1,610 @@
+TAP version 13
+# Subtest: class schedule is returned only for its owner
+ok 1 - class schedule is returned only for its owner
+  ---
+  duration_ms: 184.171861
+  type: 'test'
+  ...
+# Subtest: adjacent classes are allowed
+ok 2 - adjacent classes are allowed
+  ---
+  duration_ms: 3.310742
+  type: 'test'
+  ...
+# Subtest: overlapping classes are rejected
+ok 3 - overlapping classes are rejected
+  ---
+  duration_ms: 2.020094
+  type: 'test'
+  ...
+# Subtest: same weekday in separate terms is allowed
+ok 4 - same weekday in separate terms is allowed
+  ---
+  duration_ms: 1.114011
+  type: 'test'
+  ...
+# Subtest: cannot remove another user schedule entry
+ok 5 - cannot remove another user schedule entry
+  ---
+  duration_ms: 1.005886
+  type: 'test'
+  ...
+# Subtest: cannot use a different campus hub
+ok 6 - cannot use a different campus hub
+  ---
+  duration_ms: 1.289017
+  type: 'test'
+  ...
+# Subtest: profile mutations cannot assign role or email
+ok 7 - profile mutations cannot assign role or email
+  ---
+  duration_ms: 1.110257
+  type: 'test'
+  ...
+# Subtest: vehicle seats are bounded
+ok 8 - vehicle seats are bounded
+  ---
+  duration_ms: 1.158355
+  type: 'test'
+  ...
+# Subtest: ride creation stores UTC from campus local time
+ok 9 - ride creation stores UTC from campus local time
+  ---
+  duration_ms: 6.440792
+  type: 'test'
+  ...
+# Subtest: driver must own selected vehicle
+ok 10 - driver must own selected vehicle
+  ---
+  duration_ms: 1.635204
+  type: 'test'
+  ...
+# Subtest: route must have one campus end
+ok 11 - route must have one campus end
+  ---
+  duration_ms: 1.107459
+  type: 'test'
+  ...
+# Subtest: invalid duration rejects before insert
+ok 12 - invalid duration rejects before insert
+  ---
+  duration_ms: 4.349526
+  type: 'test'
+  ...
+# Subtest: past rides cannot be published
+ok 13 - past rides cannot be published
+  ---
+  duration_ms: 4.643912
+  type: 'test'
+  ...
+# Subtest: rides beyond 90 days cannot be published
+ok 14 - rides beyond 90 days cannot be published
+  ---
+  duration_ms: 4.21015
+  type: 'test'
+  ...
+# Subtest: driver cannot publish overlapping rides
+ok 15 - driver cannot publish overlapping rides
+  ---
+  duration_ms: 9.8239
+  type: 'test'
+  ...
+# Subtest: driver schedule conflicts are rejected
+ok 16 - driver schedule conflicts are rejected
+  ---
+  duration_ms: 6.789364
+  type: 'test'
+  ...
+# Subtest: recurring offers have a shared series ID
+ok 17 - recurring offers have a shared series ID
+  ---
+  duration_ms: 16.370621
+  type: 'test'
+  ...
+# Subtest: a conflict rolls back the complete recurring batch
+ok 18 - a conflict rolls back the complete recurring batch
+  ---
+  duration_ms: 13.834239
+  type: 'test'
+  ...
+# Subtest: recurrence is bounded at 28 days
+ok 19 - recurrence is bounded at 28 days
+  ---
+  duration_ms: 0.886611
+  type: 'test'
+  ...
+# Subtest: request stays pending and does not consume a seat
+ok 20 - request stays pending and does not consume a seat
+  ---
+  duration_ms: 3.142647
+  type: 'test'
+  ...
+# Subtest: idempotent retries return the same request
+ok 21 - idempotent retries return the same request
+  ---
+  duration_ms: 2.2312
+  type: 'test'
+  ...
+# Subtest: idempotency key rejects changed request payload
+ok 22 - idempotency key rejects changed request payload
+  ---
+  duration_ms: 2.431094
+  type: 'test'
+  ...
+# Subtest: different keys cannot duplicate a booking
+ok 23 - different keys cannot duplicate a booking
+  ---
+  duration_ms: 1.885319
+  type: 'test'
+  ...
+# Subtest: driver cannot book own ride
+ok 24 - driver cannot book own ride
+  ---
+  duration_ms: 0.871198
+  type: 'test'
+  ...
+# Subtest: campus boundaries prevent ride requests
+ok 25 - campus boundaries prevent ride requests
+  ---
+  duration_ms: 1.098666
+  type: 'test'
+  ...
+# Subtest: driver approval consumes exactly one seat
+ok 26 - driver approval consumes exactly one seat
+  ---
+  duration_ms: 8.432941
+  type: 'test'
+  ...
+# Subtest: rider cannot approve their own request
+ok 27 - rider cannot approve their own request
+  ---
+  duration_ms: 1.919606
+  type: 'test'
+  ...
+# Subtest: unrelated driver cannot decline another driver request
+ok 28 - unrelated driver cannot decline another driver request
+  ---
+  duration_ms: 9.351029
+  type: 'test'
+  ...
+# Subtest: concurrent approvals cannot overbook the last seat in the memory adapter
+ok 29 - concurrent approvals cannot overbook the last seat in the memory adapter
+  ---
+  duration_ms: 8.703457
+  type: 'test'
+  ...
+# Subtest: a full ride can accept a waitlist entry
+ok 30 - a full ride can accept a waitlist entry
+  ---
+  duration_ms: 2.867337
+  type: 'test'
+  ...
+# Subtest: full ride rejects request if waitlist was not authorized
+ok 31 - full ride rejects request if waitlist was not authorized
+  ---
+  duration_ms: 2.612917
+  type: 'test'
+  ...
+# Subtest: cancellation returns a seat and promotes the first waitlisted request
+ok 32 - cancellation returns a seat and promotes the first waitlisted request
+  ---
+  duration_ms: 3.079935
+  type: 'test'
+  ...
+# Subtest: repeated cancellation cannot decrement capacity twice
+ok 33 - repeated cancellation cannot decrement capacity twice
+  ---
+  duration_ms: 2.018395
+  type: 'test'
+  ...
+# Subtest: approval rechecks a class added after the request
+ok 34 - approval rechecks a class added after the request
+  ---
+  duration_ms: 1.803473
+  type: 'test'
+  ...
+# Subtest: cannot add class over an already confirmed trip
+ok 35 - cannot add class over an already confirmed trip
+  ---
+  duration_ms: 2.464375
+  type: 'test'
+  ...
+# Subtest: overlapping confirmations across different rides are rejected
+ok 36 - overlapping confirmations across different rides are rejected
+  ---
+  duration_ms: 4.514907
+  type: 'test'
+  ...
+# Subtest: driver cancellation closes all active bookings atomically
+ok 37 - driver cancellation closes all active bookings atomically
+  ---
+  duration_ms: 5.778541
+  type: 'test'
+  ...
+# Subtest: rider cannot cancel a driver ride
+ok 38 - rider cannot cancel a driver ride
+  ---
+  duration_ms: 1.057629
+  type: 'test'
+  ...
+# Subtest: pending requests cannot read or post in trip chat
+ok 39 - pending requests cannot read or post in trip chat
+  ---
+  duration_ms: 2.545677
+  type: 'test'
+  ...
+# Subtest: confirmed rider can send a message and view evidence of it
+ok 40 - confirmed rider can send a message and view evidence of it
+  ---
+  duration_ms: 9.340388
+  type: 'test'
+  ...
+# Subtest: cancelled rider loses trip-thread access
+ok 41 - cancelled rider loses trip-thread access
+  ---
+  duration_ms: 3.004819
+  type: 'test'
+  ...
+# Subtest: calendar export is limited to trip participants
+ok 42 - calendar export is limited to trip participants
+  ---
+  duration_ms: 2.707832
+  type: 'test'
+  ...
+# Subtest: cannot review an uncompleted trip
+ok 43 - cannot review an uncompleted trip
+  ---
+  duration_ms: 1.713282
+  type: 'test'
+  ...
+# Subtest: review allowed exactly once after an approved trip completes
+ok 44 - review allowed exactly once after an approved trip completes
+  ---
+  duration_ms: 4.095522
+  type: 'test'
+  ...
+# Subtest: students cannot read the moderation queue
+ok 45 - students cannot read the moderation queue
+  ---
+  duration_ms: 2.182899
+  type: 'test'
+  ...
+# Subtest: moderator can resolve reports and notify reporter
+ok 46 - moderator can resolve reports and notify reporter
+  ---
+  duration_ms: 2.702857
+  type: 'test'
+  ...
+# Subtest: users cannot mark other people notifications read
+ok 47 - users cannot mark other people notifications read
+  ---
+  duration_ms: 0.843083
+  type: 'test'
+  ...
+# Subtest: outbox claim is exclusive among simultaneous workers in memory adapter
+ok 48 - outbox claim is exclusive among simultaneous workers in memory adapter
+  ---
+  duration_ms: 2.283894
+  type: 'test'
+  ...
+# Subtest: successful email redacts stored recipient and body
+ok 49 - successful email redacts stored recipient and body
+  ---
+  duration_ms: 2.833787
+  type: 'test'
+  ...
+# Subtest: failed delivery backs off instead of immediately retrying
+ok 50 - failed delivery backs off instead of immediately retrying
+  ---
+  duration_ms: 3.187466
+  type: 'test'
+  ...
+# Subtest: HTTP health checks the actual store
+ok 51 - HTTP health checks the actual store
+  ---
+  duration_ms: 228.617344
+  type: 'test'
+  ...
+# Subtest: preview serves the application with restrictive CSP
+ok 52 - preview serves the application with restrictive CSP
+  ---
+  duration_ms: 7.744862
+  type: 'test'
+  ...
+# Subtest: malformed JSON is rejected before domain code
+ok 53 - malformed JSON is rejected before domain code
+  ---
+  duration_ms: 12.495715
+  type: 'test'
+  ...
+# Subtest: large request bodies are rejected
+ok 54 - large request bodies are rejected
+  ---
+  duration_ms: 6.723285
+  type: 'test'
+  ...
+# Subtest: HTTP cookie session authenticates across requests and revokes on logout
+ok 55 - HTTP cookie session authenticates across requests and revokes on logout
+  ---
+  duration_ms: 88.368452
+  type: 'test'
+  ...
+# Subtest: preview does not expose local database or mail through static paths
+ok 56 - preview does not expose local database or mail through static paths
+  ---
+  duration_ms: 15.20221
+  type: 'test'
+  ...
+# Subtest: haversine distance is zero for the same hub
+ok 57 - haversine distance is zero for the same hub
+  ---
+  duration_ms: 1.865726
+  type: 'test'
+  ...
+# Subtest: haversine distance is symmetric
+ok 58 - haversine distance is symmetric
+  ---
+  duration_ms: 0.312722
+  type: 'test'
+  ...
+# Subtest: overlap uses half-open intervals
+ok 59 - overlap uses half-open intervals
+  ---
+  duration_ms: 0.1847
+  type: 'test'
+  ...
+# Subtest: class window uses earliest start and latest end
+ok 60 - class window uses earliest start and latest end
+  ---
+  duration_ms: 2.114997
+  type: 'test'
+  ...
+# Subtest: date parser rejects rollover dates
+ok 61 - date parser rejects rollover dates
+  ---
+  duration_ms: 0.909642
+  type: 'test'
+  ...
+# Subtest: weekday and date arithmetic cross year boundary
+ok 62 - weekday and date arithmetic cross year boundary
+  ---
+  duration_ms: 0.293104
+  type: 'test'
+  ...
+# Subtest: winter timezone conversion uses standard time
+ok 63 - winter timezone conversion uses standard time
+  ---
+  duration_ms: 19.839716
+  type: 'test'
+  ...
+# Subtest: summer timezone conversion uses daylight time
+ok 64 - summer timezone conversion uses daylight time
+  ---
+  duration_ms: 1.147323
+  type: 'test'
+  ...
+# Subtest: DST spring gap is rejected, not silently moved
+ok 65 - DST spring gap is rejected, not silently moved
+  ---
+  duration_ms: 4.287576
+  type: 'test'
+  ...
+# Subtest: DST repeated autumn minute is rejected as ambiguous
+ok 66 - DST repeated autumn minute is rejected as ambiguous
+  ---
+  duration_ms: 1.276301
+  type: 'test'
+  ...
+# Subtest: matches arrive before earliest class and explain why
+ok 67 - matches arrive before earliest class and explain why
+  ---
+  duration_ms: 220.031302
+  type: 'test'
+  ...
+# Subtest: homebound matches leave after the last class
+ok 68 - homebound matches leave after the last class
+  ---
+  duration_ms: 6.675285
+  type: 'test'
+  ...
+# Subtest: quiet-only filter removes non-quiet offers
+ok 69 - quiet-only filter removes non-quiet offers
+  ---
+  duration_ms: 6.595059
+  type: 'test'
+  ...
+# Subtest: accessible-only filter uses declared vehicle accommodations
+ok 70 - accessible-only filter uses declared vehicle accommodations
+  ---
+  duration_ms: 5.368671
+  type: 'test'
+  ...
+# Subtest: cost cap is enforced
+ok 71 - cost cap is enforced
+  ---
+  duration_ms: 6.016345
+  type: 'test'
+  ...
+# Subtest: zero pickup distance includes only the selected hub
+ok 72 - zero pickup distance includes only the selected hub
+  ---
+  duration_ms: 5.858055
+  type: 'test'
+  ...
+# Subtest: manual target overrides the class-bound time
+ok 73 - manual target overrides the class-bound time
+  ---
+  duration_ms: 6.413425
+  type: 'test'
+  ...
+# Subtest: missing pickup hub produces a useful error
+ok 74 - missing pickup hub produces a useful error
+  ---
+  duration_ms: 1.751459
+  type: 'test'
+  ...
+# Subtest: password hashing is salted and verifies correctly
+ok 75 - password hashing is salted and verifies correctly
+  ---
+  duration_ms: 204.896923
+  type: 'test'
+  ...
+# Subtest: registration enforces configured campus email domain
+ok 76 - registration enforces configured campus email domain
+  ---
+  duration_ms: 181.960277
+  type: 'test'
+  ...
+# Subtest: new accounts cannot log in until email is verified
+ok 77 - new accounts cannot log in until email is verified
+  ---
+  duration_ms: 96.326978
+  type: 'test'
+  ...
+# Subtest: verification is one-time and allows a normal session
+ok 78 - verification is one-time and allows a normal session
+  ---
+  duration_ms: 93.511596
+  type: 'test'
+  ...
+# Subtest: database stores token hash, not raw session token
+ok 79 - database stores token hash, not raw session token
+  ---
+  duration_ms: 45.620542
+  type: 'test'
+  ...
+# Subtest: logout revokes the session
+ok 80 - logout revokes the session
+  ---
+  duration_ms: 50.845635
+  type: 'test'
+  ...
+# Subtest: expired sessions are rejected
+ok 81 - expired sessions are rejected
+  ---
+  duration_ms: 47.803961
+  type: 'test'
+  ...
+# Subtest: suspended accounts cannot use existing sessions
+ok 82 - suspended accounts cannot use existing sessions
+  ---
+  duration_ms: 48.51787
+  type: 'test'
+  ...
+# Subtest: password reset revokes all prior sessions
+ok 83 - password reset revokes all prior sessions
+  ---
+  duration_ms: 142.179554
+  type: 'test'
+  ...
+# Subtest: unknown reset accounts produce same generic response
+ok 84 - unknown reset accounts produce same generic response
+  ---
+  duration_ms: 3.082631
+  type: 'test'
+  ...
+# Subtest: rate limiter rejects excess actions and resets by time window
+ok 85 - rate limiter rejects excess actions and resets by time window
+  ---
+  duration_ms: 1.994178
+  type: 'test'
+  ...
+# Subtest: API refuses unauthenticated private data
+ok 86 - API refuses unauthenticated private data
+  ---
+  duration_ms: 1.523699
+  type: 'test'
+  ...
+# Subtest: API rejects cross-origin mutations
+ok 87 - API rejects cross-origin mutations
+  ---
+  duration_ms: 0.594778
+  type: 'test'
+  ...
+# Subtest: API rejects mutations without the custom client header
+ok 88 - API rejects mutations without the custom client header
+  ---
+  duration_ms: 0.413573
+  type: 'test'
+  ...
+# Subtest: API rejects non-JSON mutations
+ok 89 - API rejects non-JSON mutations
+  ---
+  duration_ms: 0.496601
+  type: 'test'
+  ...
+# Subtest: session cookies are HttpOnly and SameSite Strict; token is not JSON
+ok 90 - session cookies are HttpOnly and SameSite Strict; token is not JSON
+  ---
+  duration_ms: 49.754896
+  type: 'test'
+  ...
+# Subtest: HTTPS sessions use Secure host-prefixed cookies
+ok 91 - HTTPS sessions use Secure host-prefixed cookies
+  ---
+  duration_ms: 48.070592
+  type: 'test'
+  ...
+# Subtest: ride listing never exposes another user email or password hash
+ok 92 - ride listing never exposes another user email or password hash
+  ---
+  duration_ms: 55.748481
+  type: 'test'
+  ...
+# Subtest: API payload validation rejects NaN query parameters
+ok 93 - API payload validation rejects NaN query parameters
+  ---
+  duration_ms: 48.294684
+  type: 'test'
+  ...
+# Subtest: private responses cannot be cached
+ok 94 - private responses cannot be cached
+  ---
+  duration_ms: 47.642735
+  type: 'test'
+  ...
+# Subtest: calendar download returns calendar MIME type
+ok 95 - calendar download returns calendar MIME type
+  ---
+  duration_ms: 47.608881
+  type: 'test'
+  ...
+# Subtest: memory transactions roll back all writes on an error
+ok 96 - memory transactions roll back all writes on an error
+  ---
+  duration_ms: 160.276597
+  type: 'test'
+  ...
+# Subtest: reads return isolated objects rather than mutable store references
+ok 97 - reads return isolated objects rather than mutable store references
+  ---
+  duration_ms: 1.217185
+  type: 'test'
+  ...
+# Subtest: failed persistence does not commit the memory state
+ok 98 - failed persistence does not commit the memory state
+  ---
+  duration_ms: 0.367662
+  type: 'test'
+  ...
+# Subtest: memory query supports AND OR and range predicates
+ok 99 - memory query supports AND OR and range predicates
+  ---
+  duration_ms: 0.294063
+  type: 'test'
+  ...
+# Subtest: unique email constraint is not case normalization dependent at service boundary
+ok 100 - unique email constraint is not case normalization dependent at service boundary
+  ---
+  duration_ms: 55.818525
+  type: 'test'
+  ...
+1..100
+# tests 100
+# suites 0
+# pass 100
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1719.484936

@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: PostgreSQL last-seat race admits exactly one approval
+ok 1 - PostgreSQL last-seat race admits exactly one approval # SKIP
+  ---
+  duration_ms: 0.681638
+  type: 'test'
+  ...
+# Subtest: PostgreSQL rejects impossible capacity even outside the service
+ok 2 - PostgreSQL rejects impossible capacity even outside the service # SKIP
+  ---
+  duration_ms: 0.118739
+  type: 'test'
+  ...
+# Subtest: PostgreSQL rollback discards a partial notification
+ok 3 - PostgreSQL rollback discards a partial notification # SKIP
+  ---
+  duration_ms: 0.090979
+  type: 'test'
+  ...
+# Subtest: PostgreSQL unique email constraint prevents duplicate users
+ok 4 - PostgreSQL unique email constraint prevents duplicate users # SKIP
+  ---
+  duration_ms: 0.093588
+  type: 'test'
+  ...
+# Subtest: Prisma datetime round-trip preserves UTC instants
+ok 5 - Prisma datetime round-trip preserves UTC instants # SKIP
+  ---
+  duration_ms: 0.127251
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 0
+# fail 0
+# cancelled 0
+# skipped 5
+# todo 0
+# duration_ms 75.818415

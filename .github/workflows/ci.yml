@@ -1,0 +1,70 @@
+name: verify
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install
+      - run: npm run test
+      - run: git diff --exit-code -- demo/compiled
+      - run: npm run db:generate
+      - run: npm run typecheck
+      - run: npm run build:api
+      - run: npm run build:web
+      - run: npm audit --omit=dev --audit-level=high
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env: {POSTGRES_USER: campusloop, POSTGRES_PASSWORD: ci-only-password, POSTGRES_DB: campusloop_test}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U campusloop -d campusloop_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://campusloop:ci-only-password@localhost:5432/campusloop_test?schema=public
+      RUN_POSTGRES_TESTS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install
+      - run: npm run db:generate && npm run db:migrate
+      - run: npm run build:core && npm run test:postgres
+  browser:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env: {POSTGRES_USER: campusloop, POSTGRES_PASSWORD: ci-only-password, POSTGRES_DB: campusloop_test}
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U campusloop -d campusloop_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://campusloop:ci-only-password@localhost:5432/campusloop_test?schema=public
+      APP_ORIGIN: http://localhost:3000
+      DEMO_MODE: 'true'
+      DEMO_SEED: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm install
+      - run: npm run db:generate && npm run db:migrate && npm run build && npm run db:seed
+      - run: npx playwright install --with-deps chromium
+      - name: Start the real application
+        run: |
+          node apps/api/dist/main.js > /tmp/api.log 2>&1 &
+          npm run start -w @campusloop/web > /tmp/web.log 2>&1 &
+          for i in $(seq 1 60); do curl -fsS http://localhost:3000/api/health && break; sleep 2; done
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: browser-failure, path: 'playwright-report/'}

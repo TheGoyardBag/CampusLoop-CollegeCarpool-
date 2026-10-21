@@ -1,40 +1,39 @@
 {
-  "name": "ui",
-  "version": "0.1.0",
+  "name": "campusloop",
+  "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "jest-watch": "jest --watch",
-    "jest": "jest",
-    "jest-coverage": "jest --coverage=true --coverageDirectory=coverage"
+  "description": "Schedule-aware college carpooling with accountable ride coordination.",
+  "workspaces": [
+    "packages/core",
+    "apps/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=22.16.0"
   },
-  "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource/roboto": "^5.0.4",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.6",
-    "@prisma/client": "^5.2.0",
-    "@react-google-maps/api": "^2.19.3",
-    "@vis.gl/react-google-maps": "^0.7.1",
-    "bcryptjs": "^2.4.3",
-    "eslint": "^7.32.0",
-    "eslint-config-next": "^12.0.4",
-    "next": "^13.5.6",
-    "next-auth": "^4.22.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "^5.0.1"
+  "scripts": {
+    "build:core": "tsc -p packages/core/tsconfig.json",
+    "build:api": "npm run build -w @campusloop/api",
+    "build:web": "npm run build -w @campusloop/web",
+    "build": "npm run build:core && npm run build:api && npm run build:web",
+    "dev:api": "npm run dev -w @campusloop/api",
+    "dev:web": "npm run dev -w @campusloop/web",
+    "preview": "node demo/server.cjs",
+    "test:offline": "node --test tests/*.test.cjs",
+    "test": "npm run build:core && node scripts/sync-demo.cjs && npm run test:offline",
+    "typecheck": "npm run build:core && npm run typecheck -w @campusloop/api && npm run typecheck -w @campusloop/web",
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema prisma/schema.prisma",
+    "db:seed": "node scripts/seed.cjs",
+    "test:postgres": "npm run build:api && node --test tests/integration/postgres.test.cjs",
+    "test:e2e": "playwright test",
+    "sync:demo": "node scripts/sync-demo.cjs"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "jest-fetch-mock": "^3.0.3",
-    "prisma": "^5.2.0"
-  }
+    "typescript": "5.9.3",
+    "@types/node": "^22.15.0",
+    "prisma": "6.19.3",
+    "@playwright/test": "^1.56.0"
+  },
+  "license": "MIT"
 }

@@ -1,0 +1,71 @@
+{
+  "transport": "Python HTTP bridge to real Node API",
+  "frontend": "dependency-free preview; NOT Next.js",
+  "checks": [
+    {
+      "name": "rider sign-in and schedule-aware recommendations",
+      "passed": true
+    },
+    {
+      "name": "mobile layout has no document-wide horizontal overflow",
+      "passed": true
+    },
+    {
+      "name": "quiet-only search filter",
+      "passed": true
+    },
+    {
+      "name": "vehicle accessibility filter",
+      "passed": true
+    },
+    {
+      "name": "rider submits a seat request",
+      "passed": true
+    },
+    {
+      "name": "pending request does not grant chat access",
+      "passed": true
+    },
+    {
+      "name": "driver approves a rider request",
+      "passed": true
+    },
+    {
+      "name": "confirmed status persists across sign-in sessions",
+      "passed": true
+    },
+    {
+      "name": "confirmed trip exports a calendar payload",
+      "passed": true
+    },
+    {
+      "name": "trip messages persist and render untrusted text safely",
+      "passed": true
+    },
+    {
+      "name": "rider submits a private moderation report",
+      "passed": true
+    },
+    {
+      "name": "private weekly schedule persists",
+      "passed": true
+    },
+    {
+      "name": "profile adds a driver-owned vehicle",
+      "passed": true
+    },
+    {
+      "name": "student publishes an actual ride offer",
+      "passed": true
+    },
+    {
+      "name": "moderator resolves report through role-gated workflow",
+      "passed": true
+    },
+    {
+      "name": "no uncaught JavaScript page errors during the scenario",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}

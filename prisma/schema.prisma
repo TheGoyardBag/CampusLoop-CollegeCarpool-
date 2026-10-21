@@ -1,130 +1,256 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
-
-// Define your datasource block with the appropriate provider and connection URL
 datasource db {
-  provider = "postgresql" // You should use the correct provider for your database
-  url      = env("DATABASE_URL") // Replace with your actual database connection URL
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Campus {
+  id String @id
+  name String
+  timezone String
+  emailDomain String
+  hub_campusId Hub[] @relation("Hub_campusId")
+  user_campusId User[] @relation("User_campusId")
+  ride_campusId Ride[] @relation("Ride_campusId")
+}
+
+model Hub {
+  id String @id
+  campusId String
+  name String
+  lat Float
+  lng Float
+  isCampus Boolean
+  instructions String
+  campusIdRef Campus @relation("Hub_campusId", fields: [campusId], references: [id], onDelete: Restrict)
+  user_homeHubId User[] @relation("User_homeHubId")
+  ride_originHubId Ride[] @relation("Ride_originHubId")
+  ride_destinationHubId Ride[] @relation("Ride_destinationHubId")
+  @@index([campusId])
 }
 
 model User {
-  id               Int             @id @default(autoincrement())
-  email            String          @unique
-  password         String 
-  firstName        String
-  lastName         String
-  age              String?
-  gender           String?
-  cpVerified       Int?
-  dlVerified       Int?
-  conversations    Conversation[]  @relation("ConversationParticipants")
-  sentMessages     Message[]       @relation("Sender")
-  recievedMessages Message[]       @relation("Recipient")
-  ridesGiven       Ride[]          @relation("Driver")
-  ridesRequested   Request[]       @relation("Requester")
-  chatEngineSecret String? 
-  chatEngineId     Int?
+  id String @id
+  email String
+  passwordHash String
+  name String
+  campusId String
+  homeHubId String?
+  role String
+  emailVerifiedAt DateTime? @db.Timestamptz(3)
+  suspendedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  campusIdRef Campus @relation("User_campusId", fields: [campusId], references: [id], onDelete: Restrict)
+  homeHubIdRef Hub? @relation("User_homeHubId", fields: [homeHubId], references: [id], onDelete: Restrict)
+  session_userId Session[] @relation("Session_userId")
+  actionToken_userId ActionToken[] @relation("ActionToken_userId")
+  course_userId Course[] @relation("Course_userId")
+  vehicle_userId Vehicle[] @relation("Vehicle_userId")
+  ride_driverId Ride[] @relation("Ride_driverId")
+  booking_riderId Booking[] @relation("Booking_riderId")
+  message_userId Message[] @relation("Message_userId")
+  notification_userId Notification[] @relation("Notification_userId")
+  report_reporterId Report[] @relation("Report_reporterId")
+  audit_actorId Audit[] @relation("Audit_actorId")
+  outbox_userId Outbox[] @relation("Outbox_userId")
+  idempotency_userId Idempotency[] @relation("Idempotency_userId")
+  review_reviewerId Review[] @relation("Review_reviewerId")
+  @@unique([email])
+  @@index([campusId])
 }
 
-model Message {
-  id             Int          @id @default(autoincrement())
-  content        String
-  request        Boolean
-  time           DateTime
-  senderId       Int
-  recipientId    Int
-  conversationId Int
-  sender         User         @relation(name: "Sender", fields: [senderId], references: [id])
-  recipient      User         @relation(name: "Recipient", fields: [recipientId], references: [id])
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-
-  @@map("messages")
+model Session {
+  id String @id
+  userId String
+  tokenHash String
+  expiresAt DateTime @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  userIdRef User @relation("Session_userId", fields: [userId], references: [id], onDelete: Restrict)
+  @@unique([tokenHash])
+  @@index([userId])
+  @@index([expiresAt])
 }
 
-model Conversation {
-  id            Int       @id @default(autoincrement())
-  participants  User[]    @relation("ConversationParticipants")
-  messages      Message[]
-
-  @@map("conversations")
+model ActionToken {
+  id String @id
+  userId String
+  tokenHash String
+  purpose String
+  expiresAt DateTime @db.Timestamptz(3)
+  usedAt DateTime? @db.Timestamptz(3)
+  userIdRef User @relation("ActionToken_userId", fields: [userId], references: [id], onDelete: Restrict)
+  @@unique([tokenHash])
+  @@index([userId, purpose])
+  @@index([expiresAt])
 }
 
-model Request {
-  id Int @id @default(autoincrement())
-  request Boolean
-  time DateTime
-  rideId Int @unique
-  requesterId Int
-  status Boolean
-  accepted Boolean
-  ride Ride @relation(name: "Ride", fields: [rideId], references: [id])
-  requester User @relation(name: "Requester", fields: [requesterId], references: [id])
+model Course {
+  id String @id
+  userId String
+  name String
+  weekday Int
+  startMinute Int
+  endMinute Int
+  termStart String
+  termEnd String
+  userIdRef User @relation("Course_userId", fields: [userId], references: [id], onDelete: Restrict)
+  @@index([userId, weekday])
+}
+
+model Vehicle {
+  id String @id
+  userId String
+  label String
+  color String
+  seats Int
+  accessible Boolean
+  userIdRef User @relation("Vehicle_userId", fields: [userId], references: [id], onDelete: Restrict)
+  ride_vehicleId Ride[] @relation("Ride_vehicleId")
+  @@index([userId])
 }
 
 model Ride {
-  id Int @id @default(autoincrement())
-  startLoc String
-  endLoc String
-  stops String?
-  request String
-  date String
-  time String
-  numStops Int
-  driverId Int
-  seats String
-  price String
-  driver User @relation(name: "Driver", fields: [driverId], references: [id])
-  rideRequests Request[] @relation("Ride")
-}
-
-model Posting {
-  id Int @id @default(autoincrement())
-  startLoc String
-  endLoc String
-  date String
-  time String
-  driverId Int
-  seats String
-  price String
-  driverName String
-}
-
-model RiderRequest {
-  id Int @id @default(autoincrement())
-  postId Int
-  riderId Int
-}
-
-model Accepted {
-  id Int @id @default(autoincrement())
-  postId Int
-  riderId Int
-}
-
-model Declined {
-  id Int @id @default(autoincrement())
-  postId Int
-  riderId Int
-}
-
-model DriveStatus {
-  id Int @id @default(autoincrement())
-  postId Int
+  id String @id
+  campusId String
+  driverId String
+  vehicleId String
+  originHubId String
+  destinationHubId String
+  direction String
+  departureAt DateTime @db.Timestamptz(3)
+  arrivalAt DateTime @db.Timestamptz(3)
+  capacity Int
+  seatsUsed Int
+  costCents Int
+  quiet Boolean
   status String
-  riderIds String
+  seriesId String?
+  createdAt DateTime @db.Timestamptz(3)
+  campusIdRef Campus @relation("Ride_campusId", fields: [campusId], references: [id], onDelete: Restrict)
+  driverIdRef User @relation("Ride_driverId", fields: [driverId], references: [id], onDelete: Restrict)
+  vehicleIdRef Vehicle @relation("Ride_vehicleId", fields: [vehicleId], references: [id], onDelete: Restrict)
+  originHubIdRef Hub @relation("Ride_originHubId", fields: [originHubId], references: [id], onDelete: Restrict)
+  destinationHubIdRef Hub @relation("Ride_destinationHubId", fields: [destinationHubId], references: [id], onDelete: Restrict)
+  booking_rideId Booking[] @relation("Booking_rideId")
+  message_rideId Message[] @relation("Message_rideId")
+  notification_rideId Notification[] @relation("Notification_rideId")
+  report_rideId Report[] @relation("Report_rideId")
+  review_rideId Review[] @relation("Review_rideId")
+  @@index([campusId, status, departureAt])
+  @@index([driverId, status])
 }
 
-model Rating {
-  id Int @id @default(autoincrement())
-  driverId Int
+model Booking {
+  id String @id
+  rideId String
+  riderId String
+  status String
+  note String
+  createdAt DateTime @db.Timestamptz(3)
+  updatedAt DateTime @db.Timestamptz(3)
+  rideIdRef Ride @relation("Booking_rideId", fields: [rideId], references: [id], onDelete: Restrict)
+  riderIdRef User @relation("Booking_riderId", fields: [riderId], references: [id], onDelete: Restrict)
+  idempotency_bookingId Idempotency[] @relation("Idempotency_bookingId")
+  @@unique([rideId, riderId])
+  @@index([riderId, status])
+  @@index([rideId, status, createdAt])
+}
+
+model Message {
+  id String @id
+  rideId String
+  userId String
+  text String
+  createdAt DateTime @db.Timestamptz(3)
+  rideIdRef Ride @relation("Message_rideId", fields: [rideId], references: [id], onDelete: Restrict)
+  userIdRef User @relation("Message_userId", fields: [userId], references: [id], onDelete: Restrict)
+  @@index([rideId, createdAt])
+}
+
+model Notification {
+  id String @id
+  userId String
+  title String
+  body String
+  rideId String?
+  readAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  userIdRef User @relation("Notification_userId", fields: [userId], references: [id], onDelete: Restrict)
+  rideIdRef Ride? @relation("Notification_rideId", fields: [rideId], references: [id], onDelete: Restrict)
+  @@index([userId, createdAt])
+}
+
+model Report {
+  id String @id
+  reporterId String
+  rideId String
+  reason String
+  status String
+  resolution String?
+  createdAt DateTime @db.Timestamptz(3)
+  resolvedAt DateTime? @db.Timestamptz(3)
+  reporterIdRef User @relation("Report_reporterId", fields: [reporterId], references: [id], onDelete: Restrict)
+  rideIdRef Ride @relation("Report_rideId", fields: [rideId], references: [id], onDelete: Restrict)
+  @@index([status, createdAt])
+}
+
+model Audit {
+  id String @id
+  actorId String?
+  action String
+  entityId String
+  detail String
+  createdAt DateTime @db.Timestamptz(3)
+  actorIdRef User? @relation("Audit_actorId", fields: [actorId], references: [id], onDelete: Restrict)
+  @@index([actorId, createdAt])
+}
+
+model Outbox {
+  id String @id
+  userId String
+  to String
+  subject String
+  body String
+  attempts Int
+  availableAt DateTime @db.Timestamptz(3)
+  sentAt DateTime? @db.Timestamptz(3)
+  claimedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @db.Timestamptz(3)
+  userIdRef User @relation("Outbox_userId", fields: [userId], references: [id], onDelete: Restrict)
+  @@index([sentAt, availableAt])
+}
+
+model Idempotency {
+  id String @id
+  userId String
+  key String
+  requestHash String
+  bookingId String
+  expiresAt DateTime @db.Timestamptz(3)
+  userIdRef User @relation("Idempotency_userId", fields: [userId], references: [id], onDelete: Restrict)
+  bookingIdRef Booking @relation("Idempotency_bookingId", fields: [bookingId], references: [id], onDelete: Restrict)
+  @@unique([userId, key])
+  @@index([expiresAt])
+}
+
+model RateBucket {
+  id String @id
+  count Int
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([expiresAt])
+}
+
+model Review {
+  id String @id
+  rideId String
+  reviewerId String
   rating Int
+  comment String
+  createdAt DateTime @db.Timestamptz(3)
+  rideIdRef Ride @relation("Review_rideId", fields: [rideId], references: [id], onDelete: Restrict)
+  reviewerIdRef User @relation("Review_reviewerId", fields: [reviewerId], references: [id], onDelete: Restrict)
+  @@unique([rideId, reviewerId])
 }
 
-model Verify {
-  id Int @id @default(autoincrement())
-  userId Int
-}

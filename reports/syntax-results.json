@@ -1,0 +1,33 @@
+{
+  "compiler": "5.8.3",
+  "checkedAt": "2026-10-21T19:29:57.919Z",
+  "mode": "Parse and single-file transpile only. NOT a framework build or dependency-resolved typecheck.",
+  "files": [
+    "apps/api/src/config.ts",
+    "apps/api/src/controller.ts",
+    "apps/api/src/mail-worker.ts",
+    "apps/api/src/main.ts",
+    "apps/api/src/prisma-store.ts",
+    "apps/web/app/error.tsx",
+    "apps/web/app/layout.tsx",
+    "apps/web/app/not-found.tsx",
+    "apps/web/app/page.tsx",
+    "apps/web/components/CampusApp.tsx",
+    "apps/web/lib/api.ts",
+    "apps/web/next.config.ts",
+    "packages/core/src/crypto.ts",
+    "packages/core/src/errors.ts",
+    "packages/core/src/fixtures.ts",
+    "packages/core/src/http.ts",
+    "packages/core/src/index.ts",
+    "packages/core/src/matching.ts",
+    "packages/core/src/memory-store.ts",
+    "packages/core/src/service.ts",
+    "packages/core/src/time.ts",
+    "packages/core/src/types.ts",
+    "packages/core/src/validate.ts",
+    "playwright.config.ts",
+    "tests/e2e/application.spec.ts"
+  ],
+  "failures": []
+}

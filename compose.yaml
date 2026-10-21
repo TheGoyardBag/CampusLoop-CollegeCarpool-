@@ -1,0 +1,74 @@
+# Development stack; never expose the demo to the public internet.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-campusloop}
+      POSTGRES_DB: ${POSTGRES_DB:-campusloop}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run node scripts/setup.cjs first}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["campusloop_pg:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  migrate:
+    build: {context: ., dockerfile: Dockerfile.api, target: build}
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-campusloop}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-campusloop}?schema=public
+    command: ["npm", "run", "db:migrate"]
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    build: {context: ., dockerfile: Dockerfile.api, target: runtime}
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-campusloop}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-campusloop}?schema=public
+      APP_ORIGIN: http://localhost:3000
+      API_HOST: 0.0.0.0
+      API_PORT: 4000
+      DEMO_MODE: "true"
+      NODE_ENV: development
+    expose: ["4000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  web:
+    build: {context: ., dockerfile: Dockerfile.web, args: {API_INTERNAL_URL: "http://api:4000"}}
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on:
+      api: {condition: service_healthy}
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports: ["127.0.0.1:8025:8025", "127.0.0.1:1025:1025"]
+  worker:
+    build: {context: ., dockerfile: Dockerfile.api, target: runtime}
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-campusloop}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-campusloop}?schema=public
+      APP_ORIGIN: http://localhost:3000
+      DEMO_MODE: "true"
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      NODE_ENV: development
+    command: ["node", "apps/api/dist/mail-worker.js"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      mailpit: {condition: service_started}
+  seed:
+    build: {context: ., dockerfile: Dockerfile.api, target: build}
+    profiles: ["tools"]
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-campusloop}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-campusloop}?schema=public
+      DEMO_SEED: "true"
+    command: ["node", "scripts/seed.cjs"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+volumes:
+  campusloop_pg:
