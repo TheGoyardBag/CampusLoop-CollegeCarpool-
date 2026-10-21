@@ -30,7 +30,7 @@
     "sync:demo": "node scripts/sync-demo.cjs"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "@types/node": "^22.15.0",
     "prisma": "6.19.3",
     "@playwright/test": "^1.56.0"
