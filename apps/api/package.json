@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@campusloop/core": "1.0.0",
-    "@nestjs/common": "^11.1.0",
+    "@nestjs/common": "^12.1.3",
     "@nestjs/core": "^11.1.0",
     "@nestjs/platform-express": "^11.1.0",
     "@prisma/client": "6.19.3",
